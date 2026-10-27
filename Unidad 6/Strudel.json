@@ -1,0 +1,42 @@
+const { visualid } = createParams('visualid')
+
+setcpm(30)
+
+// CAOS (4 ciclos) -> TRANSICION (4) -> CALMA (8)
+let sax = arrange(
+  [4, note("a4 bb4 e5 eb5 a5 bb5 e5 d5").fast(2)],
+  [4, note("a4 c5 e5 ~ a4 c5 e5 ~")],
+  [8, note("e5@4 c5@2 a4@2")]
+)
+  .sound("gm_soprano_sax:3").visualid("sax")
+  .legato(1)
+  .gain(1)
+
+let piano = arrange(
+  [4, silence],
+  [4, note("<[a3,c4,e4] [f3,a3,c4]>")],
+  [8, note("e5 ~ ~ c5 ~ ~ a4 ~").slow(2)]
+)
+  .sound("piano").visualid("piano")
+  .gain(0.5)
+
+let strings = arrange(
+  [4, note("a3@4 eb3@4")],
+  [4, silence],
+  [8, note("<[a3,e4,c5] [f3,c4,a4] [c3,g3,e4] [e3,b3,g4]>")]
+)
+  .sound("gm_string_ensemble_1:3").visualid("strings")
+  .gain(0.35)
+
+let bass = arrange(
+  [4, note("a2*8")],
+  [4, note("<a2 f2 c3 e2>")],
+  [8, silence]
+)
+  .sound("gm_acoustic_bass:3").visualid("bass")
+  .gain(0.6)
+
+$bass: stack(bass, bass.osc())
+$piano: stack(piano, piano.osc())
+$sax: stack(sax, sax.osc())
+$strings: stack(strings, strings.osc())
